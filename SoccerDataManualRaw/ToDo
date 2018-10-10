@@ -1,0 +1,15 @@
+
+for github
+//----------------------------------------------
+// the CountryDao has the most comments - that will explain everything. 
+// others dao are just copy paste of CountryDao.
+//----------------------------------------------
+// Write ur own path to the soccer.db in DButil.
+// write ur own path to creating xml file.
+// configure postgres. ( download postgres, download drive, connect, configure in eclipse ) 
+// https://www.youtube.com/watch?v=W4yFUVG3ytE
+// 
+ToDo:
+
+create generic createXML file for any other model
+add CASCADE drop table in dropDaoTable()
