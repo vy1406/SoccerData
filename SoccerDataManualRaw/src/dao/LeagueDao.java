@@ -31,10 +31,8 @@ import util.interfaces.PostgresReaderWriter;
 import util.interfaces.SqliteReader;
 import util.interfaces.XML_ReaderWriter;
 
-public class LeagueDao implements SqliteReader, PostgresReaderWriter, XML_ReaderWriter{
+public class LeagueDao extends Dao implements SqliteReader, PostgresReaderWriter, XML_ReaderWriter{
 
-	Connection connection;
-	
 	@Override
 	public ArrayList<League> getAll() {
 

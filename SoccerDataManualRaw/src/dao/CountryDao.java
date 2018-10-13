@@ -31,10 +31,8 @@ import util.interfaces.PostgresReaderWriter;
 import util.interfaces.SqliteReader;
 import util.interfaces.XML_ReaderWriter;
 
-public class CountryDao implements SqliteReader, PostgresReaderWriter, XML_ReaderWriter {
+public class CountryDao extends Dao implements SqliteReader, PostgresReaderWriter, XML_ReaderWriter {
 
-	Connection connection;
-	String fileName;
 	// ---------------------------------
 	// SQLreader Interface
 	// returns arraylist of countries taken from sqlite db file
