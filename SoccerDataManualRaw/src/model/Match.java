@@ -8,6 +8,42 @@ public class Match {
 	private String country_id;
 	private String league_id;
 	private String season;
+	private String stage;
+	private String home_team_id;
+	private String away_team_id;
+	private String home_goal;
+	private String away_goal;
+	
+	public String getStage() {
+		return stage;
+	}
+	public void setStage(String stage) {
+		this.stage = stage;
+	}
+	public String getHome_team_id() {
+		return home_team_id;
+	}
+	public void setHome_team_id(String home_team_id) {
+		this.home_team_id = home_team_id;
+	}
+	public String getAway_team_id() {
+		return away_team_id;
+	}
+	public void setAway_team_id(String away_team_id) {
+		this.away_team_id = away_team_id;
+	}
+	public String getHome_goal() {
+		return home_goal;
+	}
+	public void setHome_goal(String home_goal) {
+		this.home_goal = home_goal;
+	}
+	public String getAway_goal() {
+		return away_goal;
+	}
+	public void setAway_goal(String away_goal) {
+		this.away_goal = away_goal;
+	}
 	private Date date;
 	
 	
@@ -44,7 +80,8 @@ public class Match {
 	@Override
 	public String toString() {
 		return "Match [id=" + id + ", country_id=" + country_id + ", league_id=" + league_id + ", season=" + season
-				+ ", date=" + date + "]";
+				+ ", stage=" + stage + ", home_team_id=" + home_team_id + ", away_team_id=" + away_team_id
+				+ ", home_goal=" + home_goal + ", away_goal=" + away_goal + ", date=" + date + "]";
 	}
 
 	

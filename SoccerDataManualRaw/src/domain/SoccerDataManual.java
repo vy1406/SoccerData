@@ -1,6 +1,7 @@
 package domain;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import dao.CountryDao;
 import dao.LeagueDao;
@@ -26,13 +27,13 @@ public class SoccerDataManual {
 		ArrayList<Team> arrTeams = new ArrayList<>();
 		ArrayList<Match> arrMatches = new ArrayList<>();
 		
-		
+		Date date = new Date();
 		try {
 
 			//System.out.println("Is league xml created ? : " + leagueDao.createObjectXML());
 			//System.out.println("Is country xml created ? : " + countryDao.createObjectXML());
 			//System.out.println("Is team xml created ? : " + teamDao.createObjectXML());
-			System.out.println("Is match xml created ? : " + matchDao.createObjectXML());
+			//System.out.println("Is match xml created ? : " + matchDao.createObjectXML());
 			
 			//countryDao.showAll();
 			//leagueDao.showAll();
@@ -52,19 +53,19 @@ public class SoccerDataManual {
 			//countryDao.showObjectsFromXML();
 			//leagueDao.showObjectsFromXML();
 			//teamDao.showObjectsFromXML();
-			matchDao.showObjectsFromXML();
+			//matchDao.showObjectsFromXML();
 			
 			//countryDao.writeObjectsFromSQLiteToPostgreSQL();
 			//leagueDao.writeObjectsFromSQLiteToPostgreSQL();
 			//teamDao.writeObjectsFromSQLiteToPostgreSQL();
-			//matchDao.writeObjectsFromSQLiteToPostgreSQL();
+			matchDao.writeObjectsFromSQLiteToPostgreSQL();
 			
 			//SQLite_util.closeConnection();
 			//PostgreSQL_util.closeConnection();
 					
 			
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
+			e.printStackTrace();
 		}
 
 	}
