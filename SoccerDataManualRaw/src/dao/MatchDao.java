@@ -64,17 +64,22 @@ public class MatchDao extends Dao implements PostgresReaderWriter, SqliteReader,
 	public Object getObject(Node node)  {
 		Match match = new Match();
 		String s;
+		int tempInt;
 		Date date;
 		if (node.getNodeType() == Node.ELEMENT_NODE) {
 			
 			Element element = (Element) node;
 			match.setId(getTagValue("id", element));
+			tempInt = Integer.parseInt(getTagValue("match_api_id", element));
+			match.setMatch_api_id(tempInt);
 			match.setCountry_id(getTagValue("country_id", element));
 			match.setLeague_id(getTagValue("league_id", element));		
 			match.setSeason(getTagValue("season", element));
-			match.setStage(getTagValue("stage", element));
-			match.setHome_team_id(getTagValue("home_team_id", element));
-			match.setAway_team_id(getTagValue("away_team_id", element));
+			match.setStage(getTagValue("stage", element));	
+			tempInt = Integer.parseInt(getTagValue("home_team_api_id", element));
+			match.setHome_team_api_id(tempInt);
+			tempInt = Integer.parseInt(getTagValue("away_team_api_id", element));
+			match.setAway_team_api_id(tempInt);
 			match.setHome_goal(getTagValue("home_goal", element));
 			match.setAway_goal(getTagValue("away_goal", element));
 			
@@ -120,6 +125,7 @@ public class MatchDao extends Dao implements PostgresReaderWriter, SqliteReader,
 
 		ArrayList<Match> arrMatches = new ArrayList<>();
 		String fileName = "matches";
+		String tempParsedString;
 		try {
 			DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
@@ -138,6 +144,11 @@ public class MatchDao extends Dao implements PostgresReaderWriter, SqliteReader,
 				Element id = doc.createElement("id");
 				id.appendChild(doc.createTextNode(curMatch.getId()));
 				countryElem.appendChild(id);
+				
+				Element match_api_id = doc.createElement("match_api_id");
+				tempParsedString = curMatch.getMatch_api_id() +"";
+				match_api_id.appendChild(doc.createTextNode(tempParsedString));
+				countryElem.appendChild(match_api_id);
 
 				Element country_id = doc.createElement("country_id");
 				country_id.appendChild(doc.createTextNode(curMatch.getCountry_id()));
@@ -150,14 +161,16 @@ public class MatchDao extends Dao implements PostgresReaderWriter, SqliteReader,
 				Element season = doc.createElement("season");
 				season.appendChild(doc.createTextNode(curMatch.getSeason()));
 				countryElem.appendChild(season);
-
-				Element home_team_id = doc.createElement("home_team_id");
-				home_team_id.appendChild(doc.createTextNode(curMatch.getHome_team_id()));
-				countryElem.appendChild(home_team_id);
+								
+				Element home_team_api_id = doc.createElement("home_team_api_id");
+				tempParsedString = curMatch.getHome_team_api_id() +"";
+				home_team_api_id.appendChild(doc.createTextNode(tempParsedString));
+				countryElem.appendChild(home_team_api_id);
 				
-				Element away_team_id = doc.createElement("away_team_id");
-				away_team_id.appendChild(doc.createTextNode(curMatch.getAway_team_id()));
-				countryElem.appendChild(away_team_id);
+				Element away_team_api_id = doc.createElement("away_team_api_id");
+				tempParsedString = curMatch.getAway_team_api_id() +"";
+				away_team_api_id.appendChild(doc.createTextNode(tempParsedString));
+				countryElem.appendChild(away_team_api_id);
 				
 				Element home_goal = doc.createElement("home_goal");
 				home_goal.appendChild(doc.createTextNode(curMatch.getHome_goal()));
@@ -217,6 +230,7 @@ public class MatchDao extends Dao implements PostgresReaderWriter, SqliteReader,
 
 		connection = SQLite_util.getConnection();
 		ArrayList<Match> matches = new ArrayList<>();
+		int tempInt;
 		Date date;
 		try {
 			Statement statement = connection.createStatement();
@@ -224,11 +238,15 @@ public class MatchDao extends Dao implements PostgresReaderWriter, SqliteReader,
 			while (rs.next()) {
 				Match curMatch = new Match();
 				curMatch.setId(rs.getString("id"));
+				tempInt = Integer.parseInt(rs.getString("match_api_id"));
+				curMatch.setMatch_api_id(tempInt);
 				curMatch.setCountry_id(rs.getString("country_id"));
 				curMatch.setLeague_id(rs.getString("league_id"));
 				curMatch.setSeason(rs.getString("season"));
-				curMatch.setHome_team_id(rs.getString("home_team_api_id"));
-				curMatch.setAway_team_id(rs.getString("away_team_api_id"));
+				tempInt = Integer.parseInt(rs.getString("home_team_api_id"));
+				curMatch.setHome_team_api_id(tempInt);
+				tempInt = Integer.parseInt(rs.getString("away_team_api_id"));
+				curMatch.setAway_team_api_id(tempInt);
 				curMatch.setHome_goal(rs.getString("home_team_goal"));
 				curMatch.setAway_goal(rs.getString("away_team_goal"));
 				curMatch.setStage(rs.getString("stage"));
@@ -297,8 +315,8 @@ public class MatchDao extends Dao implements PostgresReaderWriter, SqliteReader,
 		Connection con = PostgreSQL_util.getConnection();
 		String message = "";
 		try {
-			String sql2 = " CREATE TABLE match ( id SERIAL PRIMARY KEY  , country_id text , league_id text , "
-					+ "season text , date text , home_team_id text, away_team_id text,"
+			String sql2 = " CREATE TABLE match ( id SERIAL PRIMARY KEY  , match_api_id integer, country_id text , league_id text , "
+					+ "season text , date text , home_team_api_id integer, away_team_api_id integer,"
 					+ " home_team_goal text, away_team_goal text, stage text ) ";
 			PreparedStatement stmt = con.prepareStatement(sql2);
 			stmt.executeUpdate();
@@ -315,20 +333,22 @@ public class MatchDao extends Dao implements PostgresReaderWriter, SqliteReader,
 	public void writeSingleObjectToPostgres(Object argObject, String argTable) throws SQLException {
 
 		Match match = (Match) argObject;
+		String tempParsedString;
 		Connection conn = PostgreSQL_util.getConnection();
-		String sql = "INSERT INTO " + argTable + " (id, country_id, league_id, season, date, home_team_id, away_team_id, home_team_goal, away_team_goal, stage) VALUES (?,?,?,?,?,?,?,?,?,?) ";
+		String sql = "INSERT INTO " + argTable + " (id, match_api_id, country_id, league_id, season, date, home_team_api_id, away_team_api_id, home_team_goal, away_team_goal, stage) VALUES (?, ?,?,?,?,?,?,?,?,?,?) ";
 		PreparedStatement st = conn.prepareStatement(sql);
 		
 		st.setInt(1, Integer.parseInt(match.getId()));
-		st.setString(2, match.getCountry_id());
-		st.setString(3, match.getLeague_id());
-		st.setString(4, match.getSeason());
-		st.setString(5, match.getDate().toString());
-		st.setString(6, match.getHome_team_id());
-		st.setString(7, match.getAway_team_id());
-		st.setString(8, match.getHome_goal());
-		st.setString(9, match.getAway_goal());
-		st.setString(10, match.getStage());
+		st.setInt(2, match.getMatch_api_id());
+		st.setString(3, match.getCountry_id());
+		st.setString(4, match.getLeague_id());
+		st.setString(5, match.getSeason());
+		st.setString(6, match.getDate().toString());
+		st.setInt(7, match.getHome_team_api_id());
+		st.setInt(8, match.getAway_team_api_id());
+		st.setString(9, match.getHome_goal());
+		st.setString(10, match.getAway_goal());
+		st.setString(11, match.getStage());
 		
 		st.executeUpdate();
 		st.close();

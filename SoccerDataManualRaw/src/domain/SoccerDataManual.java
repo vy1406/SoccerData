@@ -41,8 +41,8 @@ public class SoccerDataManual {
 
 			// leagueDao.dropDaoTable();
 			// countryDao.dropDaoTable();
-			 teamDao.dropDaoTable();
-			// matchDao.dropDaoTable();
+			// teamDao.dropDaoTable();
+		    // matchDao.dropDaoTable();
 
 			// countryDao.showObjectsFromXML();
 			// leagueDao.showObjectsFromXML();
@@ -51,7 +51,7 @@ public class SoccerDataManual {
 
 			// countryDao.writeObjectsFromSQLiteToPostgreSQL();
 			// leagueDao.writeObjectsFromSQLiteToPostgreSQL();
-			 teamDao.writeObjectsFromSQLiteToPostgreSQL();
+			// teamDao.writeObjectsFromSQLiteToPostgreSQL();
 			// matchDao.writeObjectsFromSQLiteToPostgreSQL();
 
 			// SQLite_util.closeConnection();
