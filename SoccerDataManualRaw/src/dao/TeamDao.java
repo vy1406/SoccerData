@@ -64,6 +64,8 @@ public class TeamDao extends Dao implements SqliteReader, PostgresReaderWriter, 
 		if (node.getNodeType() == Node.ELEMENT_NODE) {
 			Element element = (Element) node;
 			team.setId(getTagValue("id", element));
+			int curApi_id = Integer.parseInt(getTagValue("team_api_id", element));
+			team.setTeam_api_id(curApi_id);
 			team.setName(getTagValue("name", element));
 			team.setShort_name(getTagValue("short_name", element));
 
@@ -101,6 +103,7 @@ public class TeamDao extends Dao implements SqliteReader, PostgresReaderWriter, 
 
 		ArrayList<Team> arrTeams = new ArrayList<>();
 		String fileName = "teams";
+		String curTeamApi;
 		try {
 			DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
@@ -118,6 +121,11 @@ public class TeamDao extends Dao implements SqliteReader, PostgresReaderWriter, 
 				Element id = doc.createElement("id");
 				id.appendChild(doc.createTextNode(curTeam.getId()));
 				countryElem.appendChild(id);
+				
+				Element team_api_id = doc.createElement("team_api_id");
+			    curTeamApi = curTeam.getTeam_api_id() + "";
+				team_api_id.appendChild(doc.createTextNode(curTeamApi));
+				countryElem.appendChild(team_api_id);
 
 				Element name = doc.createElement("name");
 				name.appendChild(doc.createTextNode(curTeam.getName()));
@@ -177,7 +185,7 @@ public class TeamDao extends Dao implements SqliteReader, PostgresReaderWriter, 
 		Connection con = PostgreSQL_util.getConnection();
 		String message = "";
 		try {
-			String sql2 = "CREATE TABLE team ( id SERIAL PRIMARY KEY ,  name TEXT, short_name TEXT )";
+			String sql2 = "CREATE TABLE team ( id SERIAL PRIMARY KEY , team_api_id integer , name TEXT, short_name TEXT )";
 			PreparedStatement stmt = con.prepareStatement(sql2);
 			stmt.executeUpdate();
 			message += "team table was created ";
@@ -192,13 +200,15 @@ public class TeamDao extends Dao implements SqliteReader, PostgresReaderWriter, 
 	@Override
 	public void writeSingleObjectToPostgres(Object argObject, String argTable) throws SQLException {
 
+		
 		Team argTeam = (Team)argObject;
 		Connection conn = PostgreSQL_util.getConnection();
-		String sql = "INSERT INTO " + argTable + " (id, name, short_name) VALUES (?, ?, ? ) ";
+		String sql = "INSERT INTO " + argTable + " (id, team_api_id, name, short_name) VALUES (?, ?,?, ? ) ";
 		PreparedStatement st = conn.prepareStatement(sql);
 		st.setInt(1, Integer.parseInt(argTeam.getId()));
-		st.setString(2, argTeam.getName());
-		st.setString(3, argTeam.getShort_name());
+		st.setInt(2, argTeam.getTeam_api_id());
+		st.setString(3, argTeam.getName());
+		st.setString(4, argTeam.getShort_name());
 		st.executeUpdate();
 		st.close();
 
@@ -216,6 +226,7 @@ public class TeamDao extends Dao implements SqliteReader, PostgresReaderWriter, 
 			while (rs.next()) {
 				Team curTeam = new Team();
 				curTeam.setId(rs.getString("id"));
+				curTeam.setTeam_api_id(rs.getInt("team_api_id"));
 				curTeam.setName(rs.getString("team_long_name"));
 				curTeam.setShort_name(rs.getString("team_short_name"));
 				teams.add(curTeam);
